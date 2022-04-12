@@ -89,7 +89,7 @@ class ProfileController extends Controller
             if(!empty($request->password)){
 
                 EduProviderUsers_Provider::find($id)->update([
-                    'password'    => Hash::make($request->password),
+                    'password'    => bcrypt($request->password),
                ]);
 
             }

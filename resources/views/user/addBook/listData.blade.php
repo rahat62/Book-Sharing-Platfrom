@@ -37,13 +37,12 @@
                 <tr>
                     <th width="5%">SL.</th>
                     <th width="10%">Thumb</th>
-                    <th width="15%">Title</th>
+                    <th width="20%">Title</th>
                     <th width="10%">Category</th>
                     <th width="25%">Summery</th>
-                    <th width="10%">Total Pages</th>
+                    <th width="15%">Total Pages</th>
                     <th width="10%">Author</th>
-                    <th width="10%">Country</th>
-                    <th width="5%" class="text-center">Actions</th>
+                    <th width="5%" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,13 +50,12 @@
                     @foreach ($books as $key => $book)
                     <tr>
                         <td>{{++$key}}</td>
-                        <td><img src="{{ asset('uploads/book/thumb/'.$book->book_thumb)}}" alt=""></td>
+                        <td><img src="{{ asset('uploads/book/thumb/'.$book->book_thumb)}}" width="70" alt=""></td>
                         <td>{{$book->title}}</td>
                         <td>{{$book->category_name}}</td>
                         <td>{{Str::words(strip_tags($book->summery), 10)}}</td>
                         <td>{{$book->number_of_page}}</td>
                         <td>{{$book->author_name}}</td>
-                        <td>{{$book->country_name}}</td>
                         <td class="text-center">
                             <a href="{{route('user.addBook.edit', [$book->id])}}" class="action-icon"><i class="icon-pencil7"></i></a>
                             <a href="#" class="action-icon"><i class="icon-trash" id="delete" delete-link="{{route('user.addBook.destroy', [$book->id])}}">@csrf </i></a>

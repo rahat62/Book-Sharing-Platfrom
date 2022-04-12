@@ -35,11 +35,12 @@
             <thead>
                 <tr>
                     <th width="5%">SL.</th>
-                    <th width="15%">image</th>
+                    <th width="10%">image</th>
                     <th width="20%">Name</th>
                     <th width="20%">Email</th>
                     <th width="10%">Phone</th>
                     <th width="20%">Address</th>
+                    <th width="10%">Active Status</th>
                     <th width="10%">Books</th>
                 </tr>
             </thead>
@@ -48,11 +49,21 @@
                     @foreach ($users as $key => $user)
                     <tr>
                         <td>{{++$key}}</td>
-                        <td><img src="{{ asset('uploads/userProfile/'.$user->image)}}" class="" alt="{{$user->image}}" width="100"></td>
+                        <td><img src="{{ asset('uploads/userProfile/thumb/'.$user->image)}}" class="" alt="{{$user->image}}" width="100"></td>
                         <td>{{$user->first_name.' '. $user->last_name}}</td>
                         <td> {{$user->email}} </td>
                         <td> {{$user->phone}} </td>
                         <td> {{$user->address}} </td>
+                        <td>
+                            @if ($user->active_status == 0)
+                                <span class="text-warning">Pending</span>
+                            @elseif($user->active_status == 1)
+                                <span class="text-success">Approved</span>
+                            @else
+                                <span class="text-danger">Decline</span>
+                            @endif
+                            <button type="button" class="btn btn-info btn-xs mb-5 open-modal" modal-title="User Active Status Update" modal-type="update" modal-size="medium" modal-class="" selector="Assign" modal-link="{{route('provider.userActiveStatus', [$user->id])}}"> Approve Status </button>
+                        </td>
                         <td>
                             @php($totalBook = DB::table('books')->where('created_by', $user->id)->count())
                             <a href="{{ route('provider.bookListByUser', [$user->id]) }}" class="btn btn-success btn-xs">View Books</a>

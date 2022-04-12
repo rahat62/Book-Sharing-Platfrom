@@ -1,3 +1,4 @@
+{{-- @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"]) --}}
 @extends('layouts.default')
 
 @push('styles')
@@ -26,7 +27,6 @@
                               <th class="product-thumbnail">&nbsp;</th>
                               <th class="product-name">Book</th>
                               <th class="product-price">Owner</th>
-                              <th class="product-price">Contact</th>
                               <th class="product-subtotal">Location</th>
                            </tr>
                         </thead>
@@ -55,7 +55,7 @@
                                  <td class="product-name" data-title="Product">
                                     <a href="{{route('bookDetails')}}">{{$cartItem['name']}}</a> 
                                     <input type="hidden" class="book_id" value="{{$cartItem['id']}}" name="book_id[]">
-
+                                    <input type="hidden" class="owner_id" value="{{$cartItem['owner']}}" name="owner_id[]">
                                  </td>
 
                                  <td class="product-price" data-title="Price">
@@ -65,9 +65,6 @@
                                     </span>
                                     <input type="hidden" value="{{$cartItem['owner']}}" name="user_id[]">
 
-                                 </td>
-                                 <td class="product-subtotal" data-title="Total">
-                                    {{$userData->phone}}
                                  </td>
                                  <td class="product-subtotal" data-title="Total">
                                     {{$userData->address}}
@@ -157,7 +154,9 @@
             var book_ids = $('input[name="book_id[]"]').map(function(){
                return this.value;
             }).get();
-            console.log(book_ids);
+            var owner_ids = $('input[name="owner_id[]"]').map(function(){
+               return this.value;
+            }).get();
             var csrf = $(this).find("input[name='_token']").val();
             swal({
                title: "Are you sure?",
@@ -170,14 +169,21 @@
             }) 
             .then((isConfirm) => {
                if (isConfirm) {
+                  // $('input[type="submit"]').trigger('click');
                   // $('#borrowForm').submit();
                   $.ajax({
                      url : '{{ route('checkoutAction') }}',
                      type: "POST",
-                     data: {"_token": csrf, 'book_id': book_ids}, 
+                     data: {"_token": csrf, 'book_id': book_ids, 'owner_id': owner_ids}, 
                      dataType: 'json',
                      success:function(data){
-                        console.log(data);
+                        console.log('hello');
+                        if (data.success === true) {
+                           swal("Done!", data.message, "success");
+                           window.location.href = "{{ route('home')}}";
+                        } else {
+                           swal("Error!", data.message, "error");
+                        }
                      },
                      error: function(jqXHR, textStatus, errorThrown) {
                         swal({

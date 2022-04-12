@@ -13,12 +13,12 @@ class Author_provider extends BaseModel
     use SoftDeletes;
 
     protected $table = 'authors';
-    protected $fillable = ['id', 'name', 'details', 'created_by', 'valid'];
+    protected $fillable = ['id', 'name', 'details', 'active_status', 'created_by', 'valid'];
 
     public function scopeValid($query)
     {
         $authId = Auth::guard('provider')->id();
-        return $query->where('created_by', $authId)->where('valid', 1);
+        return $query->where('valid', 1);
     }
     public static function boot()
     {

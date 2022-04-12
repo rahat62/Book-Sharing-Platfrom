@@ -36,8 +36,9 @@
             <thead>
                 <tr>
                     <th width="5%">SL.</th>
-                    <th width="35%">Name</th>
-                    <th width="50%">Description</th>
+                    <th width="30%">Name</th>
+                    <th width="45%">Description</th>
+                    <th width="10%">Active</th>
                     <th width="10%" class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -48,6 +49,9 @@
                         <td>{{++$key}}</td>
                         <td>{{$author->name}}</td>
                         <td>{{strip_tags($author->details)}}</td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-xs mb-5 open-modal" modal-title="Active Author" modal-type="update" modal-size="medium" modal-class="" selector="Assign" modal-link="{{route('provider.author.authorActiveStatus', [$author->id])}}"> {{$author->active_status == 1 ? 'Active' : 'Pending'}} </button>
+                        </td>
                         <td class="text-center">
                             <a href="{{route('provider.author.edit', [$author->id])}}" class="action-icon"><i class="icon-pencil7"></i></a>
                             <a href="#" class="action-icon"><i class="icon-trash" id="delete" delete-link="{{route('provider.author.destroy', [$author->id])}}">@csrf </i></a>

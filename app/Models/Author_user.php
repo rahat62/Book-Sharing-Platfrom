@@ -18,7 +18,7 @@ class Author_user extends BaseModel
     public function scopeValid($query)
     {
         $authId = Auth::id();
-        return $query->where('valid', 1);
+        return $query->where('valid', 1)->where('active_status', 1);
     }
     public static function boot()
     {

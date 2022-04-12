@@ -97,17 +97,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-2">Country <span class="text-danger">*</span></label>
-                        <div class="col-lg-10">
-                            <select class="select-search" name="country_id" required="required">
-                                <option value="">Select</option>
-                                @foreach ($countries as $country)
-                                <option value="{{$country->id}}">{{$country->country_name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="control-label col-lg-2">Language <span class="text-danger">*</span></label>
                         <div class="col-lg-10">
                             <select class="select-search" name="language_id" required="required">
@@ -125,7 +114,7 @@
                         <label class="col-lg-2 control-label text-semibold">Book Thumb</label>
                         <div class="col-lg-6">
                             <input type="file" name="book_thumb" class="file-input-extensions">
-                            <span class="help-block">Allow extensions: <code>jpg</code>, <code>png</code> and <code>jpeg</code> and  Allow Size: <code>450 * 460</code> Only</span>
+                            {{-- <span class="help-block">Allow extensions: <code>jpg</code>, <code>png</code> and <code>jpeg</code> and  Allow Size: <code>450 * 460</code> Only</span> --}}
                         </div>
                     </div>
                     <!-- /Image input -->

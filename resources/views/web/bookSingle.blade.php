@@ -37,7 +37,7 @@
                         </p>
 
                         <div class="addToCartDiv">
-                            <button type="button" onclick="addToCart({{$book->id}})" >Add to cart</button>
+                            <button type="button" onclick="addToCart({{$book->id}})" >Add to List</button>
                         </div>
 
                         <div class="thb-product-meta-before" style="margin-top: 20px;">

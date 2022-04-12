@@ -1,5 +1,6 @@
 <?php
 use App\Models\Book_user;
+// use Image;
 
 class Helper {
 
@@ -41,34 +42,37 @@ class Helper {
         
         if (in_array($fileExtention, $validExtentions)) {
             $imgDimention = true; 
-            if ($reqWidth > 0 || $reqHeight > 0) {
-                $imgSizeArr = getimagesize($mainFile);
-                $imgWidth = $imgSizeArr[0];
-                $imgHeight = $imgSizeArr[1];
+            // if ($reqWidth > 0 || $reqHeight > 0) {
+            //     $imgSizeArr = getimagesize($mainFile);
+            //     $imgWidth = $imgSizeArr[0];
+            //     $imgHeight = $imgSizeArr[1];
                 
-                if ($reqWidth > 0 && $reqHeight > 0 && ($imgWidth != $reqWidth || $imgHeight != $reqHeight)) {
-                    $imgDimention = false;
-                    $dimentionErrMsg = "Image size must be ".$reqWidth."px * ".$reqHeight."px";
-                } elseif ($reqWidth > 0 && $imgWidth != $reqWidth) {
-                    $imgDimention = false;
-                    $dimentionErrMsg = "Image width must be ".$reqWidth."px";
-                } elseif ($reqHeight > 0 && $imgHeight != $reqHeight) {
-                    $imgDimention = false;
-                    $dimentionErrMsg = "Image height must be ".$reqHeight."px";
-                } 
-                // else {
-                //     $imgDimention = false;
-                //     $dimentionErrMsg = "Image height & Width does not match";
-                // }
-            } 
+            //     if ($reqWidth > 0 && $reqHeight > 0 && ($imgWidth != $reqWidth || $imgHeight != $reqHeight)) {
+            //         $imgDimention = false;
+            //         $dimentionErrMsg = "Image size must be ".$reqWidth."px * ".$reqHeight."px";
+            //     } elseif ($reqWidth > 0 && $imgWidth != $reqWidth) {
+            //         $imgDimention = false;
+            //         $dimentionErrMsg = "Image width must be ".$reqWidth."px";
+            //     } elseif ($reqHeight > 0 && $imgHeight != $reqHeight) {
+            //         $imgDimention = false;
+            //         $dimentionErrMsg = "Image height must be ".$reqHeight."px";
+            //     } 
+            //     // else {
+            //     //     $imgDimention = false;
+            //     //     $dimentionErrMsg = "Image height & Width does not match";
+            //     // }
+            // } 
 
             if ($imgDimention) {
+                // dd(2);
                 $mainFile->move($path, $fileName);
                 //create instance
                 $img = Image::make($path.'/'.$fileName);
+                // dd(1);
                 //resize image
-                $img->resize(80, null, function ($constraint) {
-                    $constraint->aspectRatio();
+                $img->resize($reqWidth, $reqHeight, function ($constraint) {
+                    // $constraint->aspectRatio();
+                    $constraint->upsize();
                 });
                 $img->save($path.'/thumb/'.$fileName);
                 
@@ -115,5 +119,52 @@ class Helper {
             return date('Ydhm').'1';
         }
 	}
+
+    // public function storeImage($request, $imgPath) {
+    //     // Get file from request
+    //     $file = $request->file('image');
+    
+    //     // Get filename with extension
+    //     $filenameWithExt = $file->getClientOriginalName();
+    
+    //     // Get file path
+    //     $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+    
+    //     // Remove unwanted characters
+    //     $filename = preg_replace("/[^A-Za-z0-9 ]/", '', $filename);
+    //     $filename = preg_replace("/\s+/", '-', $filename);
+    
+    //     // Get the original image extension
+    //     $extension = $file->getClientOriginalExtension();
+    
+    //     // Create unique file name
+    //     $fileNameToStore = $filename.'_'.time().'.'.$extension;
+    
+    //     // Refer image to method resizeImage
+    //     $save = $this->resizeImage($file, $fileNameToStore);
+    
+    //     return true;
+    // }
+    
+    // public function resizeImage($file, $fileNameToStore) {
+    //     // Resize image
+    //     $resize = Image::make($file)->resize(600, null, function ($constraint) {
+    //     $constraint->aspectRatio();
+    //     })->encode('jpg');
+    
+    //     // Create hash value
+    //     $hash = md5($resize->__toString());
+    
+    //     // Prepare qualified image name
+    //     $image = $hash."jpg";
+    
+    //     // Put image to storage
+    //     $save = Storage::put("public/images/{$fileNameToStore}", $resize->__toString());
+    
+    //     if($save) {
+    //     return true;
+    //     }
+    //     return false;
+    // }
     
 }

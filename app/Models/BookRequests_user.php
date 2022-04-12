@@ -13,7 +13,7 @@ class BookRequests_user extends BaseModel
     use SoftDeletes;
 
     protected $table = 'book_requests';
-    protected $fillable = ['id', 'book_id', 'sender_id', 'owner_id', 'status', 'status_update_time', 'created_by', 'valid'];
+    protected $fillable = ['id', 'book_id', 'sender_id', 'owner_id', 'status', 'status_update_time', 'created_by', 'return_by_borrower_status', 'return_accept_by_owner_status', 'return_by_borrower_time', 'return_accept_by_owner_time', 'valid'];
 
     public function scopeValid($query)
     {

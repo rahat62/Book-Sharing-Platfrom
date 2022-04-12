@@ -22,8 +22,7 @@ class AddBookController extends Controller
 
         $data['books'] = Book_user::join('book_categories', 'book_categories.id', '=', 'books.category_id')
             ->join('authors', 'authors.id', '=', 'books.author_id')
-            ->join('countries', 'countries.id', '=', 'books.country_id')
-            ->select('books.*', 'book_categories.name as category_name', 'authors.name as author_name', 'countries.country_name')
+            ->select('books.*', 'book_categories.name as category_name', 'authors.name as author_name')
             ->where('books.created_by', $auth_id)
             ->where('books.valid', 1)
             ->get();
@@ -35,7 +34,6 @@ class AddBookController extends Controller
     {
         $data['categories'] = BookCategory_user::valid()->get();
         $data['authors'] = Author_user::valid()->get();
-        $data['countries'] = DB::table('countries')->get();
         $data['languages'] = Language_user::valid()->get();
         $data['book_id'] = Helper::bookIdGenerate();
 
@@ -51,7 +49,6 @@ class AddBookController extends Controller
             'summery'        => 'required',
             'number_of_page' => 'required',
             'author_id'      => 'required',
-            'country_id'     => 'required',
             'language_id'    => 'required',
             'book_thumb'     => 'required'
         ]);
@@ -59,6 +56,7 @@ class AddBookController extends Controller
             $mainFile = $request->book_thumb;
             $imgPath = 'uploads/book';
             $uploadResponse = Helper::getUploadedFileName($mainFile, $imgPath, 450, 460);
+            
             if ($uploadResponse['status'] == 1) {
                 Book_user::create([
                     'book_id'        => Helper::bookIdGenerate(),
@@ -67,7 +65,6 @@ class AddBookController extends Controller
                     'summery'        => $request->summery,
                     'number_of_page' => $request->number_of_page,
                     'author_id'      => $request->author_id,
-                    'country_id'     => $request->country_id,
                     'language_id'    => $request->language_id,
                     'book_thumb'    => $uploadResponse['file_name'],
                 ]);
@@ -105,7 +102,6 @@ class AddBookController extends Controller
     {
         $data['categories'] = BookCategory_user::valid()->get();
         $data['authors'] = Author_user::valid()->get();
-        $data['countries'] = DB::table('countries')->get();
         $data['languages'] = Language_user::valid()->get();
         $data['book'] = Book_user::valid()->find($id);
 
@@ -120,7 +116,6 @@ class AddBookController extends Controller
             'summery'        => 'required',
             'number_of_page' => 'required',
             'author_id'      => 'required',
-            'country_id'     => 'required',
             'language_id'    => 'required',
             'book_thumb'     => 'required'
         ]);
@@ -142,7 +137,6 @@ class AddBookController extends Controller
                             'summery'        => $request->summery,
                             'number_of_page' => $request->number_of_page,
                             'author_id'      => $request->author_id,
-                            'country_id'     => $request->country_id,
                             'language_id'    => $request->language_id,
                             'book_thumb'     => $uploadResponse['file_name']
                         ]);
@@ -159,7 +153,6 @@ class AddBookController extends Controller
                         'summery'        => $request->summery,
                         'number_of_page' => $request->number_of_page,
                         'author_id'      => $request->author_id,
-                        'country_id'     => $request->country_id,
                         'language_id'    => $request->language_id
                     ]);
                     $output['messege'] = 'Book has been updated';
@@ -172,7 +165,6 @@ class AddBookController extends Controller
                     'summery'        => $request->summery,
                     'number_of_page' => $request->number_of_page,
                     'author_id'      => $request->author_id,
-                    'country_id'     => $request->country_id,
                     'language_id'    => $request->language_id
                 ]);
                 $output['messege'] = 'Book has been updated';

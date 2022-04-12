@@ -49,6 +49,10 @@
         .kv-fileinput-upload {
             display: none;
         }
+        .btn-xs{
+            padding: 1px 5px !important;
+            margin-top: 2px;
+        }
     </style>
 </head>
 <body class="navbar-top">
@@ -78,18 +82,62 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown language-switch active">
+                        <a href="{{ route('home') }}" style="background-color: #26a69a;">
+                            Back to Home
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        
+                        @php($newRequest = App\Models\BookRequests_user::where('owner_id', Auth::id())->where('status', 0)->count())
+
+                        @if ($newRequest != 0)
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class=" icon-bell3"></i>
+                            <span class="visible-xs-inline-block position-right">Messages</span>
+                            <span class="badge bg-warning-400">{{$newRequest}}</span>
+                        </a>
+                        @else
+                        <a href="#">
+                            <i class=" icon-bell2"></i>
+                            <span class="badge bg-warning-400">{{$newRequest}}</span>
+                        </a>
+                        @endif
+
+                        <div class="dropdown-menu dropdown-content width-350">
+                            <div class="dropdown-content-heading">
+                                Notification
+                            </div>
+    
+                            <ul class="media-list dropdown-content-body">
+                                <li class="media">
+                                    <div class="media-left">
+                                        <i class=" icon-bell3"></i>
+                                    </div>
+    
+                                    <div class="media-body">
+                                        <span class="text-muted">You have {{$newRequest}} book Request</span>
+                                        <a href="{{ route('user.bookRequest.index') }}" class="media-heading">
+                                            <span class="text-semibold">See All</span>
+                                            {{-- <span class="media-annotation pull-right">04:58</span> --}}
+                                        </a>
+    
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <li class="dropdown dropdown-user">
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             @php($authId = Auth::id()) 
                             @php($userInfo = App\Models\User::where('valid', 1)->find($authId))
 
                             @if( !empty($userInfo->image) || $userInfo->image != Null)
-                                <img src="{{ asset('uploads/userProfile/'.$userInfo->image)}}" alt="{{$userInfo->image}}">
+                                <img src="{{ asset('uploads/userProfile/thumb/'.$userInfo->image)}}" alt="{{$userInfo->image}}">
                             @else
                                 <img src="{{ asset('backend/assets/images/placeholder.jpg') }}" alt="">
                             @endif
-                            
-                            <span>{{ $userInfo->name }}</span>
+                            <span>{{ $userInfo->first_name }}</span>
                             <i class="caret"></i>
                         </a>
 
@@ -126,21 +174,25 @@
                         <div class="sidebar-user">
                             <div class="category-content">
                                 <div class="media">
-                                    <a href="#" class="media-left"><img src="{{ asset('backend/assets/images/placeholder.jpg') }}" class="img-circle img-sm" alt=""></a>
+                                    <a href="#" class="media-left">
+                                        @if( !empty($userInfo->image) || $userInfo->image != Null)
+                                            <img src="{{ asset('uploads/userProfile/thumb/'.$userInfo->image)}}" alt="{{$userInfo->image}}">
+                                        @else
+                                            <img src="{{ asset('backend/assets/images/placeholder.jpg') }}" alt="">
+                                        @endif
+                                    </a>
                                     <div class="media-body">
-                                        <span class="media-heading text-semibold"> {{ Auth::guard('web')->user()->name }} </span>
-                                        <div class="text-size-mini text-muted">
-                                            <i class="icon-pin text-size-small"></i> &nbsp;Santa Ana, CA
-                                        </div>
+                                        <span class="media-heading text-semibold"> {{ $userInfo->first_name }} </span>
+                                        
                                     </div>
 
-                                    <div class="media-right media-middle">
+                                    {{-- <div class="media-right media-middle">
                                         <ul class="icons-list">
                                             <li>
                                                 <a href="#"><i class="icon-cog3"></i></a>
                                             </li>
                                         </ul>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -151,17 +203,17 @@
                         <div class="sidebar-category sidebar-category-visible">
                             <div class="category-content no-padding">
                                 <ul class="navigation navigation-main navigation-accordion">
-                                    @php($newRequest = App\Models\BookRequests_user::where('owner_id', Auth::id())->where('status', 0)->count())
+                                    
                                     <!-- Default -->
                                     <li class="navigation-header"><span>Default</span> <i class="icon-menu" title="Main pages"></i></li>
                                     <li class="{{ (request()->is('user/home')) ? 'active' : '' }}"><a href="{{route('user.home')}}"><i class="icon-home4"></i> <span>Home</span></a></li>
                                     
+                                    <li class="{{ (request()->is('user/addAuthor')) ? 'active' : '' }}"><a href="{{route('user.addAuthor.index')}}"><i class="icon-books"></i> <span>Add Author</span></a></li>
                                     <li class="{{ (request()->is('user/addBook')) ? 'active' : '' }}"><a href="{{route('user.addBook.index')}}"><i class="icon-books"></i> <span>Add Book</span></a></li>
                                     <li class="{{ (request()->is('user/bookRequest')) ? 'active' : '' }}">
                                         <a href="{{route('user.bookRequest.index')}}">
                                             <i class="icon-books"></i> 
                                             <span>Book Request</span>
-                                            <span class="text-danger" style="color: #ff5722; font-weight: 600; font-size: 15px;">({{$newRequest}})</span>
                                         </a>
                                     </li>
                                     <li class="{{ (request()->is('user/myRequest')) ? 'active' : '' }}">

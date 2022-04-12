@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 <td colspan="2" style="text-align: center">
-                    <img src="{{ asset('uploads/userProfile/'.$ownerDetails->image) }}" width="140" alt="{{$ownerDetails->name}}">
+                    <img src="{{ asset('uploads/userProfile/thumb/'.$ownerDetails->image) }}" width="140" alt="{{$ownerDetails->name}}">
                 </td>
             </tr>
         </thead>

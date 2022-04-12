@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use Auth;
 use Validator;
@@ -38,15 +39,53 @@ class BookRequestController extends Controller
             'status' => 'required'
         ]);
         if ($validator->passes()) {
+            // DB::transaction();
             BookRequests_user::find($id)->update([
                 'status' => $request->status
             ]);
-
+            Book_user::find($request->book_id)->update([
+                'available_status' => $request->status == 1 ? 0 : 1
+            ]);
+            // DB::commit();
             $output['messege'] = 'Book request has been updated';
             $output['msgType'] = 'success';
 
             return redirect()->back()->with($output);
         }else {
+            return redirect()->back()->withErrors($validator);
+        }
+    }
+    public function returnBookByOwner($id)
+    {
+        $data['bookRequest'] = BookRequests_user::join('users', 'users.id', '=', 'book_requests.owner_id')
+            ->select('book_requests.id', 'users.first_name as user_first_name', 'users.last_name as user_last_name', 'book_requests.return_accept_by_owner_status')
+            ->where('book_requests.id', $id)
+            ->where('book_requests.valid', 1)
+            ->first();
+
+        return view('user.bookRequest.returnBookByOwner', $data);
+    }
+
+
+    public function returnBookByOwnerAction(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'return_accept_by_owner_status' => 'required'
+        ]);
+        if ($validator->passes()) {
+            $bookRequest = BookRequests_user::find($id);
+            $bookRequest->update([
+                'return_accept_by_owner_status' => $request->return_accept_by_owner_status,
+                'return_accept_by_owner_time'   => date('Y-m-d H:i:s')
+            ]);
+            Book_user::find($bookRequest->book_id)->update([
+                'available_status' => 1
+            ]);
+            
+            $output['messege'] = 'Return Status has been Updated';
+            $output['msgType'] = 'success';
+            return redirect()->back()->with($output);
+        } else {
             return redirect()->back()->withErrors($validator);
         }
     }

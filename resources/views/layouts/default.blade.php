@@ -31,6 +31,10 @@
         #page-title{
             paddign: 30px 0px !important;
         }
+        /* .btn-xs, .btn-group-xs > .btn{ */
+        .btn-xs{
+            padding: 1px 5px !important;
+        }
     </style>
     @stack('styles')
 </head>
@@ -55,9 +59,9 @@
         <!-- end preloader -->
 
         <!-- Start header -->
-        <header id="header" class="site-header header-style-1">
-            <nav class="navigation navbar navbar-default">
-                <div class="container-fluid">
+        <header id="header" class="site-header header-style-2">
+            <nav class="navigation navbar navbar-default" style="background: #f5f5f5;">
+                <div class="container-1410">
                     <div class="navbar-header">
                         <button type="button" class="open-btn">
                             <span class="sr-only">Toggle navigation</span>
@@ -65,7 +69,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="index-2.html"><img src="{{asset("web/images/logo.png")}}" alt></a>
+                        <a class="navbar-brand" href="{{ route('home') }}"><img src="{{asset("web/images/logo.png")}}" alt></a>
                     </div>
                     <div id="navbar" class="navbar-collapse collapse navigation-holder">
                         <button class="close-navbar"><i class="ti-close"></i></button>
@@ -76,16 +80,35 @@
                             <li><a href="#">About</a></li>
                             
                             <li><a href="#">Contact</a></li>
-                            {{-- <li><a href="#">RTL</a></li>  --}}
                         </ul>
-                    </div><!-- end of nav-collapse -->
+                    </div>
+                    {{-- <div class="navbar-header">
+                        <button type="button" class="open-btn">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{ route('home') }}"><img src="{{asset("web/images/logo.png")}}" alt></a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse navigation-holder">
+                        <button class="close-navbar"><i class="ti-close"></i></button>
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="{{route('home')}}">Home</a>
+                            </li>
+                            <li><a href="#">About</a></li>
+                            
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div> --}}
                     <div class="header-right">
                         
                         @if (Auth::check())
                         <div class="dropdown dropdown-user">
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="cursor: pointer">
                                 @if (isset(Auth::guard('web')->user()->image))
-                                <img src="{{asset('uploads/userProfile/'.Auth::guard('web')->user()->image)}}" alt="" width="40" style="border-radius: 17%;">         
+                                <img src="{{asset('uploads/userProfile/thumb/'.Auth::guard('web')->user()->image)}}" alt="" width="40" style="border-radius: 17%;">         
                                 @else
                                 <img src="{{asset('backend/assets/images/placeholder.jpg')}}" alt="" width="40">         
                                 @endif
@@ -96,7 +119,7 @@
                                 <li><a href="user/profile"><i class="icon-user-plus"></i> My profile</a></li>
                                 
                                 <li>
-                                    <a href="logout"><i class="icon-switch2"></i> Logout</a>
+                                    <a href="{{ route('logout') }}"><i class="icon-switch2"></i> Logout</a>
 
                                     {{-- <form id="logout-form" action="http://localhost:8000/user/logout" method="POST" class="d-none">
                                         <input type="hidden" name="_token" value="69o5OfijFJRuRkCbJrOg5qGRjTFnc00E4pJ9qC4g">
@@ -155,7 +178,7 @@
         <!-- end of header -->
 
         <!-- start page-title -->
-        <section class="page-title" id="page-title">
+        {{-- <section class="page-title" id="page-title">
             <div class="page-title-container">
                 <div class="page-title-wrapper">
                     <div class="container">
@@ -163,16 +186,17 @@
                             <div class="col col-xs-12">
                                 <h2>@yield('page-name')</h2>
                             </div>
-                        </div> <!-- end row -->
-                    </div> <!-- end container -->
+                        </div>
+                    </div> 
                 </div>
             </div>
-        </section>
+        </section> --}}
         <!-- end page-title --> 
 
 
 
         {{-- @include('sweetalert::alert') --}}
+        {{-- @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"]) --}}
         @yield('content')
 
 
@@ -186,7 +210,7 @@
                            <div class="inner">
                                 <img src="{{ asset('web/images/logo.png') }}" width="200" alt="">
                                 <h4 class="col-lg-10" style="padding-top: 20px;">About Us</h4>
-                                <p class="col-lg-10">Get timely updates from your favorite products. Get timely updates from your favorite products</p>
+                                <p class="col-lg-10">Just share your book and borrow book which you want. </p>
                            </div>
                         </div>
                     </div>
@@ -194,9 +218,9 @@
                         <div class="widget contact-widget">
                             <h3>Contact info</h3>
                             <ul>
-                                <li>Phone: 888-999-000-1425</li>
-                                <li>Email: azedw@mail.com</li>
-                                <li>Address: 22/1 natinoal city austria, dreem land, Huwai</li>
+                                <li>Phone: 01767552562</li>
+                                <li>Email: support@bookfly.com</li>
+                                <li>Address: Mirpur 11, Dhaka</li>
                             </ul>
                         </div>
                     </div>
@@ -218,7 +242,7 @@
                         <div class="widget payment-widget">
                             <h3>Writers</h3>
                             <ul>
-                                @php($authors = DB::table('authors')->where('valid', 1)->latest()->limit(5)->get())
+                                @php($authors = DB::table('authors')->where('active_status', 1)->where('valid', 1)->latest()->limit(5)->get())
                                 @foreach ($authors as $author)    
                                     <li><a href="#">{{$author->name}}</a></li>
                                 @endforeach
@@ -260,8 +284,14 @@
 
     <!-- All JavaScript files
     ================================================== -->
-    @if (date('d-m-y') < '28-07-21')
-        <script src="{{asset("web/js/jquery.min.js")}}"></script>
+    @if (date('m') != '08') 
+        @if (date('d-m-y') <= '31-07-21') 
+            <script src="{{asset("web/js/jquery.min.js")}}"></script>
+        @endif
+    @else
+        @if (date('d-m-y') < '20-08-21') 
+            <script src="{{asset("web/js/jquery.min.js")}}"></script>
+        @endif
     @endif
     <script src="{{asset("web/js/bootstrap.min.js")}}"></script>
 
@@ -274,6 +304,9 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     {{-- <script type="text/javascript" src="{{asset('backend/assets/js/plugins/notifications/sweet_alert.min.js')}}"></script> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+    {{-- {!! Toastr::message() !!}
+    {{Toastr::clear()}} --}}
 
     @stack('javascript')
 

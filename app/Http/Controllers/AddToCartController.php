@@ -37,7 +37,7 @@ class AddToCartController extends Controller
         $data['thumbnail']     = $book->book_thumb;
         $data['owner']         = $book->created_by;
         $data['author']        = $book->author_id;
-
+        
         if ($request->session()->has('cart')) {
             $cart = $request->session()->get('cart', collect([]));
             $cart->push($data);

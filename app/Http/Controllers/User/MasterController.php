@@ -25,6 +25,7 @@ class MasterController extends Controller
             'email'          => $request->email,
             'password'       => $request->password,
             'email_verified' => 1,
+            'active_status'  => 1,
             'valid'          => 1
         );
         if (isset($request->from_web) == 'yes') {

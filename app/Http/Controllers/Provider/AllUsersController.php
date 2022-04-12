@@ -91,4 +91,29 @@ class AllUsersController extends Controller
 
         return view('provider.allUsers.bookListByUser', $data);
     }
+
+    public function userActiveStatus($id)
+    {
+        $data['user'] = User_provider::where('id', $id)
+            ->where('valid', 1)
+            ->first();
+
+        return view('provider.allUsers.userActiveStatus', $data);
+    }
+
+    public function userActiveStatusAction(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'active_status'     => 'required'
+        ]);
+        if ($validator->passes()) {
+            User_provider::find($id)->update(['active_status' => $request->active_status]);
+            
+            $output['messege'] = 'User Active Status has been Updated';
+            $output['msgType'] = 'success';
+            return redirect()->back()->with($output);
+        } else {
+            return redirect()->back()->withErrors($validator);
+        }
+    }
 }

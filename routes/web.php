@@ -41,6 +41,7 @@ Route::group([],function() {
     Route::post('loginAction', [App\Http\Controllers\WebMasterController::class, 'loginAction'])->name('loginAction');
     Route::get('register', [App\Http\Controllers\WebMasterController::class, 'register'])->name('register');
     Route::post('registerAction', [App\Http\Controllers\WebMasterController::class, 'registerAction'])->name('registerAction');
+    Route::get('userVerification/{token}', [App\Http\Controllers\WebMasterController::class, 'userVerification'])->name('userVerification');
 
     // Auth::routes();
     // Home Page
@@ -64,6 +65,7 @@ Route::group([],function() {
     Route::group(['middleware' => 'userAuth'], function (){
         Route::get('/viewCart', [App\Http\Controllers\HomeController::class, 'viewCart'])->name('viewCart');
         Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+        Route::post('/addRating/{product_id}', [App\Http\Controllers\HomeController::class, 'addRating'])->name('addRating');
     });
 });
 
@@ -82,15 +84,20 @@ Route::group(['prefix' => 'user', 'as'=>'user.'], function (){
         Route::put('profilePassUpdate/{id}', [App\Http\Controllers\User\ProfileController::class, 'updatePassword'])->name('profilePassUpdate');
 
         //BOOK ROUTE
+        Route::resource('addAuthor', App\Http\Controllers\User\AuthorController::class);
         Route::resource('addBook', App\Http\Controllers\User\AddBookController::class);
         Route::group(['prefix' => 'bookRequest', 'as'=>'bookRequest.'], function (){
             Route::get('/', [App\Http\Controllers\User\BookRequestController::class, 'index'])->name('index');
             Route::get('requestControl/{id}', [App\Http\Controllers\User\BookRequestController::class, 'requestControl'])->name('requestControl');
             Route::post('requestControlAction/{id}', [App\Http\Controllers\User\BookRequestController::class, 'requestControlAction'])->name('requestControlAction');
+            Route::get('returnBookByOwner/{book_id}', [App\Http\Controllers\User\BookRequestController::class, 'returnBookByOwner'])->name('returnBookByOwner');
+            Route::post('returnBookByOwnerAction/{book_id}', [App\Http\Controllers\User\BookRequestController::class, 'returnBookByOwnerAction'])->name('returnBookByOwnerAction');
         });
         Route::group(['prefix' => 'myRequest', 'as'=>'myRequest.'], function (){
             Route::get('/', [App\Http\Controllers\User\MyRequestController::class, 'index'])->name('index');
             Route::get('ownerDetails/{owner_id}', [App\Http\Controllers\User\MyRequestController::class, 'ownerDetails'])->name('ownerDetails');
+            Route::get('returnBook/{book_id}', [App\Http\Controllers\User\MyRequestController::class, 'returnBook'])->name('returnBook');
+            Route::post('returnBookAction/{book_id}', [App\Http\Controllers\User\MyRequestController::class, 'returnBookAction'])->name('returnBookAction');
         });
     });
 });
@@ -109,10 +116,14 @@ Route::group(['prefix' => 'provider', 'as'=>'provider.'], function (){
         Route::put('profilePassUpdate/{id}', [App\Http\Controllers\Provider\ProfileController::class, 'updatePassword'])->name('profilePassUpdate');
 
         Route::resource('author', App\Http\Controllers\Provider\AuthorController::class);
+        Route::get('author/authorActiveStatus/{user_id}', [App\Http\Controllers\Provider\AuthorController::class, 'authorActiveStatus'])->name('author.authorActiveStatus');
+        Route::post('author/authorActiveStatusAction/{user_id}', [App\Http\Controllers\Provider\AuthorController::class, 'authorActiveStatusAction'])->name('author.authorActiveStatusAction');
         Route::resource('bookCategory', App\Http\Controllers\Provider\BookCategoryController::class);
         Route::resource('language', App\Http\Controllers\Provider\LanguageController::class);
         Route::resource('allUsers', App\Http\Controllers\Provider\AllUsersController::class);
         Route::get('allUsers/bookListByUser/{user_id}', [App\Http\Controllers\Provider\AllUsersController::class, 'bookListByUser'])->name('bookListByUser');
+        Route::get('allUsers/userActiveStatus/{user_id}', [App\Http\Controllers\Provider\AllUsersController::class, 'userActiveStatus'])->name('userActiveStatus');
+        Route::post('allUsers/userActiveStatusAction/{user_id}', [App\Http\Controllers\Provider\AllUsersController::class, 'userActiveStatusAction'])->name('userActiveStatusAction');
 
         Route::get('allBooks', [App\Http\Controllers\Provider\AllBooksController::class, 'allBooks'])->name('allBooks');
         Route::get('bookApproval/{book_id}', [App\Http\Controllers\Provider\AllBooksController::class, 'bookApproval'])->name('bookApproval');

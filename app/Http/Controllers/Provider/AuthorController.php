@@ -31,7 +31,8 @@ class AuthorController extends Controller
         if ($validator->passes()) {
             Author_provider::create([
                 'name' => $request->name,
-                'details' => $request->details
+                'details' => $request->details,
+                'active_status' => 1,
             ]);
             $output['messege'] = 'Author has been created';
             $output['msgType'] = 'success';
@@ -76,5 +77,32 @@ class AuthorController extends Controller
     public function destroy($id)
     {
         Author_provider::valid()->find($id)->delete();
+    }
+
+    public function authorActiveStatus($id)
+    {
+        $data['author'] = Author_provider::find($id);
+
+        return view('provider.author.authorActiveStatus', $data);
+    }
+
+
+    public function authorActiveStatusAction(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'active_status' => 'required'
+        ]);
+        if ($validator->passes()) {
+            $bookRequest = Author_provider::find($id);
+            $bookRequest->update([
+                'active_status' => $request->active_status
+            ]);
+            
+            $output['messege'] = 'Active Status has been Updated';
+            $output['msgType'] = 'success';
+            return redirect()->back()->with($output);
+        } else {
+            return redirect()->back()->withErrors($validator);
+        }
     }
 }

@@ -58,11 +58,12 @@
             <thead>
                 <tr>
                     <th width="5%">SL.</th>
-                    <th width="10%">Thumb</th>
+                    <th width="5%">Thumb</th>
                     <th width="15%">Book Id</th>
-                    <th width="35%">Title</th>
-                    <th width="20%">Request From</th>
+                    <th width="20%">Title</th>
+                    <th width="15%">Owner</th>
                     <th width="10%">Author</th>
+                    <th width="20%">Return Status</th>
                     <th width="5%" class="text-center">Status</th>
                 </tr>
             </thead>
@@ -76,6 +77,14 @@
                         <td>{{$bookRequestInfo->book_title}}</td>
                         <td>{{$bookRequestInfo->user_first_name. ' '.$bookRequestInfo->user_last_name}}</td>
                         <td>{{$bookRequestInfo->author_name}}</td>
+                        <td>
+                            @if ($bookRequestInfo->status == 1)
+                                <button type="button" class="btn btn-info btn-xs mb-5 open-modal" modal-title="Return Book" modal-type="update" modal-size="medium" modal-class="" selector="Assign" modal-link="{{route('user.myRequest.returnBook', [$bookRequestInfo->id])}}"  {{$bookRequestInfo->return_by_borrower_status == 1 ? 'disabled' : ''}}> {{$bookRequestInfo->return_by_borrower_status == 1 ? 'Returned' : 'Return Book '}} </button>
+                            @endif
+                            @if ($bookRequestInfo->return_accept_by_owner_status == 1)
+                                <span class="text-success">Owner received the book</span>
+                            @endif
+                        </td>
                         <td class="text-center">
                             @if ($bookRequestInfo->status == 1)
                             <span class="label label-success">Accepted</span>

@@ -13,7 +13,7 @@ class Users_user extends BaseModel
     use SoftDeletes;
 
     protected $table = 'users';
-    protected $fillable = ['id', 'first_name', 'last_name', 'email', 'password', 'phone', 'image', 'email_verified', 'valid'];
+    protected $fillable = ['id', 'first_name', 'last_name', 'address','email', 'password', 'phone', 'image', 'email_verified', 'valid'];
 
     public function scopeValid($query)
     {

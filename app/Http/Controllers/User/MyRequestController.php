@@ -33,4 +33,36 @@ class MyRequestController extends Controller
         $data['ownerDetails'] = Users_user::find($id);
         return view('user.myRequest.ownerDetails', $data);
     }
+
+    public function returnBook($id)
+    {
+        $data['bookRequest'] = BookRequests_user::join('users', 'users.id', '=', 'book_requests.owner_id')
+            ->select('book_requests.id', 'users.first_name as user_first_name', 'users.last_name as user_last_name')
+            ->where('book_requests.id', $id)
+            ->where('book_requests.valid', 1)
+            ->first();
+
+        return view('user.myRequest.returnBook', $data);
+    }
+
+
+    public function returnBookAction(Request $request, $id)
+    {
+        // return dd($request->return_by_borrower_status, $id);
+        $validator = Validator::make($request->all(), [
+            'return_by_borrower_status' => 'required'
+        ]);
+        if ($validator->passes()) {
+            BookRequests_user::find($id)->update([
+                'return_by_borrower_status' => $request->return_by_borrower_status,
+                'return_by_borrower_time'   => date('Y-m-d H:i:s')
+            ]);
+            
+            $output['messege'] = 'Return Status has been Updated';
+            $output['msgType'] = 'success';
+            return redirect()->back()->with($output);
+        } else {
+            return redirect()->back()->withErrors($validator);
+        }
+    }
 }

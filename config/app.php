@@ -175,8 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        RealRashid\SweetAlert\SweetAlertServiceProvider::class
-
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        Brian2694\Toastr\ToastrServiceProvider::class
     ],
 
     /*
@@ -231,7 +231,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
 
-
+        'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
     ],
 
 ];

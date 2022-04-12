@@ -60,9 +60,10 @@
                     <th width="5%">SL.</th>
                     <th width="10%">Thumb</th>
                     <th width="15%">Book Id</th>
-                    <th width="35%">Title</th>
+                    <th width="25%">Title</th>
                     <th width="20%">Request From</th>
                     <th width="10%">Author</th>
+                    <th width="10%">Return Status</th>
                     <th width="5%" class="text-center">Status</th>
                 </tr>
             </thead>
@@ -76,6 +77,11 @@
                         <td>{{$bookRequestInfo->book_title}}</td>
                         <td>{{$bookRequestInfo->user_first_name. ' '.$bookRequestInfo->user_last_name}}</td>
                         <td>{{$bookRequestInfo->author_name}}</td>
+                        <td>
+                            @if ($bookRequestInfo->return_by_borrower_status == 1)
+                                <button type="button" class="btn btn-info btn-xs mb-5 open-modal" modal-title="Receive Book" modal-type="update" modal-size="medium" modal-class="" selector="Assign" modal-link="{{route('user.bookRequest.returnBookByOwner', [$bookRequestInfo->id])}}"> {{$bookRequestInfo->return_by_owner_status == 1 ? 'Returned' : 'Receive Book '}} </button>
+                            @endif
+                        </td>
                         <td class="text-center">
                             {{-- <a href="{{route('user.bookRequest.requestControl', [$bookRequestInfo->id])}}" 
                                 class="btn {{$bookRequestInfo->status == 1 ? 'btn-success' : ($bookRequestInfo->status == 2 ? 'btn-danger' : 'btn-warning')}} btn-sm" {{$bookRequestInfo->status == 1 ? 'disabled' : ($bookRequestInfo->status == 2 ? 'disabled' : '')}}>
@@ -87,8 +93,7 @@
                             <span class="label label-danger">Pending</span><br>
                             @endif --}}
                             <button type="button" 
-                            class="btn {{$bookRequestInfo->status == 1 ? 'btn-success' : ($bookRequestInfo->status == 2 ? 'btn-danger' : 'btn-warning')}} btn-xs mb-5 open-modal" {{$bookRequestInfo->status == 1 ? 'disabled' : ($bookRequestInfo->status == 2 ? 'disabled' : '')}}
-                            modal-title="Book Request Update" modal-type="update" modal-size="medium" modal-class="" selector="Assign" modal-link="{{route('user.bookRequest.requestControl', [$bookRequestInfo->id])}}"> {{$bookRequestInfo->status == 1 ? 'Accepted' : ($bookRequestInfo->status == 2 ? 'Rejected' : 'Pending')}} </button>
+                            class="btn {{$bookRequestInfo->status == 1 ? 'btn-success' : ($bookRequestInfo->status == 2 ? 'btn-danger' : 'btn-warning')}} btn-xs mb-5 open-modal" modal-title="Book Request Update" modal-type="update" modal-size="medium" modal-class="" selector="Assign" modal-link="{{route('user.bookRequest.requestControl', [$bookRequestInfo->id])}}"> {{$bookRequestInfo->status == 1 ? 'Accepted' : ($bookRequestInfo->status == 2 ? 'Rejected' : 'Pending')}} </button>
                         </td>
                     </tr> 
                     @endforeach

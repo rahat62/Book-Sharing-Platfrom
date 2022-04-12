@@ -146,7 +146,7 @@
                                                         <div class="close fileinput-remove text-right" id="custom_close">×</div>
                                                         <div class="file-preview-thumbnails">
                                                             <div class="file-preview-frame" id="preview-1603644588432-0">
-                                                                <img src="{{ asset('uploads/userProfile/'.$user_info->image)}}" class="file-preview-image" alt="{{$user_info->image}}" style="width:auto;height:200px;">
+                                                                <img src="{{ asset('uploads/userProfile/thumb/'.$user_info->image)}}" class="file-preview-image" alt="{{$user_info->image}}" style="width:auto;height:200px;">
                                                             </div>
                                                         </div>
                                                         <div class="clearfix"></div>   
@@ -156,7 +156,7 @@
                                                     </div>
                                                     <div id="custom_file_input" style="display: none;">
                                                         <input type="file" name="provider_image" class="file-input-extensions">
-                                                        <span class="help-block">Allow extensions: <code>jpg</code>, <code>png</code> and <code>jpeg</code> and  Allow Size: <code>640 * 426</code> Only</span>
+                                                        {{-- <span class="help-block">Allow extensions: <code>jpg</code>, <code>png</code> and <code>jpeg</code> and  Allow Size: <code>640 * 426</code> Only</span> --}}
                                                     </div>
 
                                                 @else
@@ -450,7 +450,7 @@
             <div class="thumbnail">
                 <div class="thumb thumb-rounded thumb-slide">
                     @if( !empty($user_info->image) || $user_info->image != Null)
-                        <img src="{{ asset('uploads/userProfile/'.$user_info->image)}}" alt="{{$user_info->image}}">
+                        <img src="{{ asset('uploads/userProfile/thumb/'.$user_info->image)}}" alt="{{$user_info->image}}">
                     @else
                         <img src="{{ asset('backend/assets/images/placeholder.jpg') }}" alt="">
                     @endif
